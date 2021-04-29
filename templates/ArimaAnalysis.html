@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Arima Analysis</title>
+    <style>
+    /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+    .row.content {
+    height: 913px;
+    background-image: url("https://miro.medium.com/max/3200/1*WeIt5j_xirVA76UPxlWTzg.png");
+    height: 94.2vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 1600px 688px;
+    background-color: #79cde0;
+    }
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+    background-color: #3e444a;
+    height: 100%;
+    opacity: 90%;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+    .sidenav {
+    height: auto;
+    padding: 15px;
+    }
+    .row.content {height: auto;}
+    }
+    .my-custom-scrollbar {
+    position: relative;
+    height: 913px;
+    overflow: auto;
+    }
+    .table-wrapper-scroll-y {
+    display: block;
+    }
+    table {
+    width: 100%;
+    }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="{{ url_for('webscrape') }}">Home</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" href="{{ url_for('webscrape') }}">Web Scraping</a>
+          <a class="nav-item nav-link" href="{{ url_for('mergeupload1') }}">Merging Data</a>
+          <a class="nav-item nav-link active" href="{{ url_for('arimaupload') }}">Arima Analysis <span class="sr-only">(current)</span></a>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row content">
+        <div class="col-sm-3 sidenav">
+          <br>
+          <h3 style = "color: white; font-weight: bold;">Please Upload Your File Here:</h3>
+          <form action="/arimaupload" method=post enctype=multipart/form-data>
+            <input type=file name=file accept=".csv" required="" class="btn btn-secondary">
+            <input type=submit value=Upload class="btn btn-secondary">
+          </form>
+          <br><br>
+          <h3 style = "color: white; font-weight: bold;">To Analyse Data Please Click Here:</h3>
+          <form action="/analysis" method="post">
+            <input type="submit" value="Analyse" class="btn btn-secondary btn-lg btn-block">
+          </form>
+          <br><br>
+          <h3 style = "color: white; font-weight: bold;">Result:</h3>
+          {% for post in Toresult %}
+            <h3 style = "color: white; font-weight: bold;">{{ post.Begin }}{{ post.result }}{{ post.connect }}{{ post.number }}{{ post.end }}</h3>
+          {% endfor %}
+        </div>
+        <div class="col-sm-9">
+          <div class="table-wrapper-scroll-y my-custom-scrollbar">
+            <table class="table  table-striped table-dark">
+              <tbody>
+                {% for table in tables %}
+                  <tr>
+                    <td>{{ table|safe }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <script>
+            var messages = {{ messages | safe }};
+            for (var i=0; i<messages.length; i++) {
+              alert(messages[i]);
+            }
+          </script>
+        {% endif %}
+      {% endwith %}
+      <!-- Optional JavaScript -->
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+  </html>
